@@ -1,0 +1,29 @@
+{
+    "name": "lakamark/flexible-framework",
+    "description": "A PHP framework with a module system",
+    "version": "1.0.0",
+    "keywords": ["framework", "PHP"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marc-Antoine Lacasse",
+            "email": "m.a.l.musique@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "FlexibleFramework\\": "src/FlexibleFramework"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=8.2",
+        "guzzlehttp/guzzle": "8.0.x-dev",
+        "http-interop/response-sender": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.2@dev",
+        "friendsofphp/php-cs-fixer": "dev-master"
+    }
+}
