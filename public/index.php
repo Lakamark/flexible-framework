@@ -9,7 +9,9 @@ use GuzzleHttp\Psr7\ServerRequest;
 
 use function Http\Response\send;
 
-$kernel = new Kernel([]);
+$kernel = new Kernel([
+    \App\Blog\BlogModule::class,
+]);
 
 if (php_sapi_name() !== "cli") {
     $response = $kernel->run(ServerRequest::fromGlobals());

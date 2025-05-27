@@ -2,9 +2,13 @@
 
 namespace Tests\FlexibleFramework;
 
+use App\Blog\BlogModule;
 use FlexibleFramework\Kernel;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Tests\FlexibleFramework\Modules\ErroredModule;
+use Tests\FlexibleFramework\Modules\StringModule;
 
 class KernelTest extends TestCase
 {
@@ -25,9 +29,17 @@ class KernelTest extends TestCase
 
     public function testBlogKernel(): void
     {
+        $kernel = new Kernel([
+            BlogModule::class,
+        ]);
         $request = new ServerRequest('GET', '/blog');
-        $response = $this->kernel->run($request);
+        $response = $kernel->run($request);
+
+        $requestSingle = new ServerRequest('GET', '/blog/my-article');
+        $responseSingle = $kernel->run($requestSingle);
+
         $this->assertStringContainsString('<h1>Blog</h1>', (string) $response->getBody());
+        $this->assertStringContainsString('<h1>Article my-article</h1>', (string) $responseSingle->getBody());
         $this->assertEquals(200, $response->getStatusCode());
     }
 
@@ -39,4 +51,24 @@ class KernelTest extends TestCase
         $this->assertEquals(404, $response->getStatusCode());
     }
 
+    public function testThrowExceptionNoResponse(): void
+    {
+        $kernel = new Kernel([
+            ErroredModule::class,
+        ]);
+        $request = new ServerRequest('GET', '/demo');
+        $this->expectException(\RuntimeException::class);
+        $kernel->run($request);
+    }
+
+    public function testCovertStringToResponse(): void
+    {
+        $kernel = new Kernel([
+            StringModule::class,
+        ]);
+        $request = new ServerRequest('GET', '/demo');
+        $response = $kernel->run($request);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertStringContainsString("DEMO", (string) $response->getBody());
+    }
 }
