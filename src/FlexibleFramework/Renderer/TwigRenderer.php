@@ -37,6 +37,6 @@ class TwigRenderer implements RendererInterface
      */
     public function render(string $view, array $params = []): string
     {
-        return $this->twig->render($view, $params);
+        return $this->twig->render($view . '.html.twig', $params);
     }
 }

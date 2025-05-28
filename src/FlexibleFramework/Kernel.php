@@ -3,6 +3,7 @@
 namespace FlexibleFramework;
 
 use GuzzleHttp\Psr7\Response;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -19,11 +20,12 @@ class Kernel
      */
     private Router $router;
 
-    public function __construct(array $modules = [])
-    {
-        $this->router = new Router();
+    public function __construct(
+        private ContainerInterface $container,
+        $modules = []
+    ) {
         foreach ($modules as $module) {
-            $this->modules[] = new $module($this->router);
+            $this->modules[] = $container->get($module);
         }
     }
 
@@ -42,7 +44,7 @@ class Kernel
 
 
         // Router
-        $route = $this->router->match($request);
+        $route = $this->container->get(Router::class)->match($request);
         if (is_null($route)) {
             return new Response(404, [], '<h1>404 Not Found</h1>');
         }
@@ -54,7 +56,11 @@ class Kernel
         }, $request);
 
         // Callable route
-        $response = call_user_func_array($route->getCallback(), [$request]);
+        $callback = $this->container->get($route->getCallback());
+        if (is_string($callback)) {
+            $callback = $this->container->get($callback);
+        }
+        $response = call_user_func_array($callback, [$request]);
 
         if (is_string($response)) {
             return new Response(200, [], $response);
