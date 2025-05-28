@@ -20,7 +20,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "guzzlehttp/guzzle": "8.0.x-dev",
         "http-interop/response-sender": "dev-master",
         "mezzio/mezzio-fastroute": "3.14.x-dev"
