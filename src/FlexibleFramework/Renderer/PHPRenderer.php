@@ -2,7 +2,7 @@
 
 namespace FlexibleFramework\Renderer;
 
-class PHPRenderer
+class PHPRenderer implements RendererInterface
 {
     public const string DEFAULT_NAMESPACE = '__FLEXIBLE_FRAMEWORK__';
 
