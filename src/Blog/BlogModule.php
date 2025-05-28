@@ -11,6 +11,10 @@ class BlogModule extends AbstractModule
 {
     public const string DEFINITIONS = __DIR__ . '/config/config.php';
 
+    public const string MIGRATIONS = __DIR__ . '/db/migrations';
+
+    public const string SEEDS = __DIR__ . '/db/seeds';
+
     public function __construct(
         private readonly string $prefix,
         private readonly Router $router,

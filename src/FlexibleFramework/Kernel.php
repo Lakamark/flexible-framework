@@ -70,4 +70,14 @@ class Kernel
             throw new \RuntimeException('Unexpected response type');
         }
     }
+
+    /**
+     * Get the kernel container
+     *
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
 }
