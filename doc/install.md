@@ -21,10 +21,10 @@ Don't publish it on GitHub to avoid some security issues.**
  * The main configuration for your database.
  */
 return [
-    'database.host' => 'localhost',
-    'database.username' => 'root',
-    'database.password' => 'root',
-    'database.name' => 'flexible',
+    'database.host' => 'YOUR_HOST',
+    'database.username' => 'YOUR_USERNAME',
+    'database.password' => 'YOUR_PASSWORD',
+    'database.name' => 'YOUR_DATABSE_NAME',
 ];
 ````
 
