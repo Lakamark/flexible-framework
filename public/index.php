@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use function Http\Response\send;
 
 $modules = [
+    \App\Admin\AdminModule::class,
     \App\Blog\BlogModule::class,
 ];
 

@@ -42,9 +42,17 @@ class Kernel
                 ->withHeader("Location", substr($uri, 0, -1));
         }
 
-
         // Router
-        $route = $this->container->get(Router::class)->match($request);
+        $router = $this->container->get(Router::class);
+        $route = $router->match($request);
+        $parseBody = $request->getParsedBody();
+
+        // To handle DELETE request in the kernel
+        if (array_key_exists('_method', $parseBody) &&
+            in_array($parseBody['_method'], ['PUT', 'DELETE'])) {
+            $request = $request->withMethod($parseBody['_method']);
+        }
+
         if (is_null($route)) {
             return new Response(404, [], '<h1>404 Not Found</h1>');
         }
