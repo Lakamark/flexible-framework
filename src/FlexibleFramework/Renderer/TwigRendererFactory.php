@@ -1,8 +1,7 @@
 <?php
 
-namespace App\FlexibleFramework\Renderer;
+namespace FlexibleFramework\Renderer;
 
-use FlexibleFramework\Renderer\TwigRenderer;
 use Psr\Container\ContainerInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;

@@ -3,5 +3,22 @@
 {% block title "My blog" %}
 
 {% block body %}
-    <h1>My Blog</h1>
+    <h1>Blog</h1>
+    <div class="row">
+        {% for row in posts | batch(3) %}
+            {% for post in row %}
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.name }}</h5>
+                            <p class="text-muted">{{ post.created_at | ago }}</p>
+                            <p class="card-text">{{ post.content | excerpt(250) | nl2br}}</p>
+                            <a href="{{ path('blog.show', {slug: post.slug, id: post.id} )}}" class="card-link">Learn more</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {{ paginate(posts, 'blog.index') }}
 {% endblock %}

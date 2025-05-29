@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This is an example. Please duplicate this file and rename the file config.php to apply your own workflow
  * configuration. See the doc to learn more include in this project.

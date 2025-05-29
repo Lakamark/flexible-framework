@@ -22,6 +22,6 @@ class BlogModule extends AbstractModule
     ) {
         $this->renderer->addPath('blog', __DIR__ . '/templates');
         $this->router->get($this->prefix, BlogAction::class, 'blog.index');
-        $this->router->get($this->prefix . '/{slug:[a-z0-9\-]+}', BlogAction::class, 'blog.show');
+        $this->router->get($this->prefix . '/{slug:[a-z0-9\-]+}-{id:[0-9]+}', BlogAction::class, 'blog.show');
     }
 }
