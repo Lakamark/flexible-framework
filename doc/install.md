@@ -9,7 +9,11 @@ Run composer install to generate the vandor directory.
 composer install
 ````
 
-In the root project. Duplicate the file config.dist.php to config.php. Ensure to  
+In the root project, duplicate the file config.dist.php to config.php.
+
+**Ensure the config.php is added in the .ignore file. 
+Don't publish it on GitHub to avoid some security issues.**
+
 ````php
 <?php
 
