@@ -24,6 +24,8 @@ foreach ($modules as $module) {
     }
 }
 
+$builder->addDefinitions(dirname(__DIR__) . '/config.php');
+
 $container = $builder->build();
 
 $kernel = new Kernel($container, $modules);

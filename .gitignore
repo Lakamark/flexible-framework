@@ -4,3 +4,4 @@
 .php-cs-fixer.cache
 .php-cs-fixer.php
 composer.lock
+config.php

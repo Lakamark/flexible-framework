@@ -23,9 +23,9 @@ Some libraries watched in the video are abandoned.
 I should find some alternatives or to develop my own feature. The theory of the courses is still up to date.
 
 ## Why do you want to create your own framework?
-It is a good question. Let me explain the reason:
-
-They are some good PHP frameworks already exist (Symfony, Laravel CakePHP etc.)
+It is a good question. They are some good PHP frameworks already exist (Symfony, Laravel CakePHP etc.) You're right. 
+Let me 
+explain the reason:
 1. I want to improve my PHP.
 2. I am looking at some challenges.
 3. The big frameworks have their own pattern (MVC) Model-Controller-View.
