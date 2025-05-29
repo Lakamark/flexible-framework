@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\FlexibleFramework\Twig;
+namespace FlexibleFramework\Twig;
 
-use FlexibleFramework\Twig\TimeTwigExtension;
 use PHPUnit\Framework\TestCase;
 
 class TimeTwigExtensionTest extends TestCase

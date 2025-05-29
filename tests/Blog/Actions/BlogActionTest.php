@@ -9,7 +9,6 @@ use FlexibleFramework\Renderer\RendererInterface;
 use FlexibleFramework\Router;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\Prophet;
 
 class BlogActionTest extends TestCase
