@@ -44,3 +44,6 @@ framework is not ready, they are a lot to do. Actually, it is an experimental pr
 The project is open source. Everyone can clone the repository to help me to grow up the framework. If you have some
 ideals to implement new fixtures, you can open to issues. I do my best to respect the standard code. You can command
 the section code and classes to explain why it is not in the standard code. I am open to any tips to improve my skills.
+
+## Installation
+They are installation process available via the [doc directory](doc/install.md) included in this project.

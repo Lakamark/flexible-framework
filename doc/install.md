@@ -30,11 +30,15 @@ To create your database on mysql server
 CREATE DATABASE demo;
 ````
 
-Now you have a database. You can run the migration via phinx command line
+Now you have a database.
+You can run the migration via phinx command line.
+[To learn more about phinx on the official 
+documentation.](https://book.cakephp.org/phinx/0/en/index.html)
 
 ````bash
 vendor/bin/phinx seed:run
 ````
+
 
 When you have finished configuring the project. You can run the PHP server.
 Be careful!
