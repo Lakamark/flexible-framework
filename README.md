@@ -26,7 +26,7 @@ I should find some alternatives or to develop my own feature. The theory of the 
 It is a good question. Let me explain the reason:
 
 They are some good PHP frameworks already exist (Symfony, Laravel CakePHP etc.)
-1. First, I want to improve my PHP.
+1. I want to improve my PHP.
 2. I am looking at some challenges.
 3. The big frameworks have their own pattern (MVC) Model-Controller-View.
    It is perfect if you stay in the frame.
