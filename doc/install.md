@@ -3,7 +3,7 @@
 To run the demo. You need to lunch some command line and to edit the configuration.
 
 
-Run composer install to generate the vandor directory.
+Run composer install to generate the vendor directory.
 
 ````bash
 composer install
@@ -40,9 +40,15 @@ You can run the migration via phinx command line.
 documentation.](https://book.cakephp.org/phinx/0/en/index.html)
 
 ````bash
-vendor/bin/phinx seed:run
+vendor/bin/phinx migrat
 ````
 
+Once you are created the table schema.
+You can run the seeding command to generate some fake data.
+
+````bash
+vendor/bin/phinx seed:run
+````
 
 When you have finished configuring the project. You can run the PHP server.
 Be careful!
