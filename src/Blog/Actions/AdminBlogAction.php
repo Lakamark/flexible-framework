@@ -8,6 +8,7 @@ use FlexibleFramework\Actions\RouterAware;
 use FlexibleFramework\Renderer\RendererInterface;
 use FlexibleFramework\Router;
 use FlexibleFramework\Session\FlashService;
+use FlexibleFramework\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -22,12 +23,12 @@ class AdminBlogAction
         private readonly FlashService $flash,
     ) {}
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): string|ResponseInterface
     {
         if ($request->getMethod() === 'DELETE') {
             return $this->delete($request);
         }
-        if (substr((string) $request->getUri(), -3) === 'new') {
+        if (str_ends_with((string) $request->getUri(), 'new')) {
             return $this->create($request);
         }
         if ($request->getAttribute('id')) {
@@ -47,22 +48,34 @@ class AdminBlogAction
      * Create a new post
      *
      * @param Request $request
-     * @return ResponseInterface
+     * @return ResponseInterface|string
      */
-    public function create(Request $request)
+    public function create(Request $request): ResponseInterface|string
     {
         $item = new Post();
+        $errors = [];
         if ($request->getMethod() === 'POST') {
             $params = $this->getParams($request);
             $params = array_merge($params, [
                 'updated_at' => date('Y-m-d H:i:s'),
                 'created_at' => date('Y-m-d H:i:s'),
             ]);
-            $this->postTable->insert($params);
-            $this->flash->success('Post created');
-            return $this->redirect('post.admin.index');
+
+            $item = $params;
+
+            $validator = $this->getValidator($request);
+            if ($validator->isValid()) {
+                $this->postTable->insert($params);
+                $this->flash->success('Post created');
+                return $this->redirect('post.admin.index');
+            }
+
+            $errors = $validator->getErrors();
         }
-        return $this->renderer->render('@blog/admin/create', compact('item'));
+        return $this->renderer->render('@blog/admin/create', [
+            'item' => $item,
+            'errors' => $errors,
+        ]);
     }
 
     /**
@@ -71,26 +84,36 @@ class AdminBlogAction
      * @param Request $request
      * @return ResponseInterface|string
      */
-    public function edit(Request $request)
+    public function edit(Request $request): string|ResponseInterface
     {
         $item = $this->postTable->find($request->getAttribute('id'));
+        $errors = [];
 
         if ($request->getMethod() === 'POST') {
             $params = $this->getParams($request);
             $params['updated_at'] = date('Y-m-d H:i:s');
 
-            $this->postTable->update($item->id, $params);
-            $this->flash->success('Post edited');
-            return $this->redirect('post.admin.index');
+            $validator = $this->getValidator($request);
+            if ($validator->isValid()) {
+                $this->postTable->update($item->id, $params);
+                $this->flash->success('Post edited');
+                return $this->redirect('post.admin.index');
+            }
+
+            $item->content = $params['content'];
+            $item->name = $params['name'];
+            $item->slug = $params['slug'];
+            $errors = $validator->getErrors();
         }
 
-        return $this->renderer->render('@blog/admin/edit', compact('item'));
+        return $this->renderer->render('@blog/admin/edit', compact('item', 'errors'));
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): ResponseInterface
     {
         $item = $this->postTable->find($request->getAttribute('id'));
         $this->postTable->delete($item->id);
+        $this->flash->success('Post deleted');
         return $this->redirect('post.admin.index');
     }
 
@@ -99,5 +122,15 @@ class AdminBlogAction
         return array_filter($request->getParsedBody(), function ($key) {
             return in_array($key, ['name', 'slug', 'content']);
         }, ARRAY_FILTER_USE_KEY);
+    }
+
+    private function getValidator(Request $request): Validator
+    {
+        return (new Validator($request->getParsedBody()))
+            ->required('content', 'name', 'slug')
+            ->length('content', 10)
+            ->length('name', 2, 255)
+            ->length('slug', 2, 50)
+            ->slug('slug');
     }
 }
