@@ -8,6 +8,7 @@ use FlexibleFramework\Renderer\TwigRendererFactory;
 use FlexibleFramework\Router\RouterTwigExtension;
 use FlexibleFramework\Renderer\RendererInterface;
 use FlexibleFramework\Twig\FlashTwigExtension;
+use FlexibleFramework\Twig\FormTwigExtension;
 use FlexibleFramework\Twig\PagerFantaExtension;
 use FlexibleFramework\Twig\TextTwigExtension;
 use FlexibleFramework\Twig\TimeTwigExtension;
@@ -23,6 +24,7 @@ return [
         get(TimeTwigExtension::class),
         get(TextTwigExtension::class),
         get(FlashTwigExtension::class),
+        get(FormTwigExtension::class),
     ],
     RendererInterface::class => factory(new TwigRendererFactory()),
 ];

@@ -1,0 +1,96 @@
+<?php
+
+namespace Tests\FlexibleFramework\Twig;
+
+use FlexibleFramework\Twig\FormTwigExtension;
+use PHPUnit\Framework\TestCase;
+
+class FormExtensionTest extends TestCase
+{
+    private FormTwigExtension $formTwigExtension;
+
+    public function setUp(): void
+    {
+        $this->formTwigExtension = new FormTwigExtension();
+    }
+
+    public function testField(): void
+    {
+        $html = $this->formTwigExtension->field(
+            [],
+            'name',
+            'demo',
+            'Titre'
+        );
+        $this->assertSimilar("
+            <div class=\"form-group\">
+              <label for=\"name\">Titre</label>
+              <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" value=\"demo\">
+            </div>
+        ", $html);
+    }
+
+    public function testFieldWithClass()
+    {
+        $html = $this->formTwigExtension->field(
+            [],
+            'name',
+            'demo',
+            'Titre',
+            ['class' => 'demo']
+        );
+        $this->assertSimilar("
+            <div class=\"form-group\">
+              <label for=\"name\">Titre</label>
+              <input type=\"text\" class=\"form-control demo\" name=\"name\" id=\"name\" value=\"demo\">
+            </div>
+        ", $html);
+    }
+
+    public function testTextareaField(): void
+    {
+        $html = $this->formTwigExtension->field(
+            [],
+            'name',
+            'demo',
+            'Titre',
+            ['type' => 'textarea']
+        );
+        $this->assertSimilar("
+            <div class=\"form-group\">
+              <label for=\"name\">Titre</label>
+              <textarea class=\"form-control\" name=\"name\" id=\"name\">demo</textarea>
+            </div>
+        ", $html);
+    }
+
+    public function testFieldWithErrors(): void
+    {
+        $context = ['errors' => ['name' => 'error']];
+        $html = $this->formTwigExtension->field(
+            $context,
+            'name',
+            'demo',
+            'Titre'
+        );
+        $this->assertSimilar("
+            <div class=\"form-group form-check\">
+              <label for=\"name\">Titre</label>
+              <input type=\"text\" class=\"form-control is-invalid\" name=\"name\" id=\"name\" value=\"demo\">
+              <div class=\"invalid-feedback\">error</div>
+            </div>
+        ", $html);
+    }
+
+    private function trim(string $string): string
+    {
+        $lines = explode(PHP_EOL, $string);
+        $lines = array_map('trim', $lines);
+        return implode('', $lines);
+    }
+
+    public function assertSimilar(string $expected, string $actual): void
+    {
+        $this->assertEquals($this->trim($expected), $this->trim($actual));
+    }
+}

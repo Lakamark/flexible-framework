@@ -56,10 +56,6 @@ class AdminBlogAction
         $errors = [];
         if ($request->getMethod() === 'POST') {
             $params = $this->getParams($request);
-            $params = array_merge($params, [
-                'updated_at' => date('Y-m-d H:i:s'),
-                'created_at' => date('Y-m-d H:i:s'),
-            ]);
 
             $item = $params;
 
@@ -119,9 +115,12 @@ class AdminBlogAction
 
     private function getParams(Request $request): array
     {
-        return array_filter($request->getParsedBody(), function ($key) {
-            return in_array($key, ['name', 'slug', 'content']);
+        $params = array_filter($request->getParsedBody(), function ($key) {
+            return in_array($key, ['name', 'slug', 'content', 'created_at']);
         }, ARRAY_FILTER_USE_KEY);
+        return array_merge($params, [
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
     }
 
     private function getValidator(Request $request): Validator

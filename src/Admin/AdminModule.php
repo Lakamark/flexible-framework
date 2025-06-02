@@ -7,7 +7,7 @@ use FlexibleFramework\Renderer\RendererInterface;
 
 class AdminModule extends AbstractModule
 {
-    public const string DEFINITIONS =  __DIR__ . '/config.php';
+    public const string DEFINITIONS =  __DIR__ . '/config/config.php';
 
     public function __construct(
         private readonly RendererInterface $renderer,
