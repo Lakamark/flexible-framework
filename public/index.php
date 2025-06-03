@@ -10,6 +10,7 @@ use FlexibleFramework\Kernel;
 use FlexibleFramework\Middleware\DispatcherMiddleware;
 use FlexibleFramework\Middleware\MethodMiddleware;
 use FlexibleFramework\Middleware\NotFoundMiddleware;
+use FlexibleFramework\Middleware\RendererRequestMiddleware;
 use FlexibleFramework\Middleware\RouterMiddleware;
 use FlexibleFramework\Middleware\TrailingSlashMiddleware;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -26,6 +27,7 @@ $kernel = (new Kernel([
 
 $kernel
     ->pipe(TrailingSlashMiddleware::class)
+    ->pipe(RendererRequestMiddleware::class)
     ->pipe(MethodMiddleware::class)
     ->pipe(RouterMiddleware::class)
     ->pipe(DispatcherMiddleware::class)
