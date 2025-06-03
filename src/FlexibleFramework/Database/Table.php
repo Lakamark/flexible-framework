@@ -111,6 +111,16 @@ class Table
     }
 
     /**
+     * Count records in the database
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return $this->fetchColumn("SELECT COUNT(id) FROM $this->table");
+    }
+
+    /**
      * Insert a new record in the database
      *
      * @param array $params
@@ -225,5 +235,25 @@ class Table
             throw new NoRecordException();
         }
         return $record;
+    }
+
+    /**
+     * Get the first column in the database
+     *
+     * @param string $query
+     * @param array $params
+     * @return mixed
+     */
+    private function fetchColumn(string $query, array $params = []): mixed
+    {
+        $query = $this->pdo->prepare($query);
+        $query->execute($params);
+
+        // If the entity is defined, we change the fetch mode
+        // Otherwise we use de default fetch mode
+        if ($this->entity) {
+            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+        }
+        return $query->fetchColumn();
     }
 }
