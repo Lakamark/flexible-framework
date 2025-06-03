@@ -13,6 +13,7 @@ use FlexibleFramework\Middleware\NotFoundMiddleware;
 use FlexibleFramework\Middleware\RendererRequestMiddleware;
 use FlexibleFramework\Middleware\RouterMiddleware;
 use FlexibleFramework\Middleware\TrailingSlashMiddleware;
+use Franzl\Middleware\Whoops\WhoopsMiddleware;
 use GuzzleHttp\Psr7\ServerRequest;
 
 use function Http\Response\send;
@@ -26,6 +27,7 @@ $kernel = (new Kernel([
     ->addModule(BlogModule::class);
 
 $kernel
+    ->pipe(new WhoopsMiddleware())
     ->pipe(TrailingSlashMiddleware::class)
     ->pipe(RendererRequestMiddleware::class)
     ->pipe(MethodMiddleware::class)
