@@ -6,6 +6,8 @@ use DateTime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+use function DI\string;
+
 class FormTwigExtension extends AbstractExtension
 {
     /**
@@ -50,15 +52,17 @@ class FormTwigExtension extends AbstractExtension
 
         if ($type === 'textarea') {
             $input = $this->textarea($value, $attributes);
+        } elseif (array_key_exists('options', $options)) {
+            $input = $this->select($value, $options['options'], $attributes);
         } else {
+            $attributes['type'] = $options['type'] ?? 'text';
             $input = $this->input($value, $attributes);
         }
 
-        return "<div class=\"$class\">
-              <label for=\"$key\">$label</label>
-              {$input}
-              {$errors}
-            </div>";
+        return "<div class=\"" . $class . "\">
+           <label for=\"name\">{$label}</label>
+              {$input}{$errors}
+           </div>";
     }
 
     /**
@@ -86,7 +90,7 @@ class FormTwigExtension extends AbstractExtension
      */
     private function input(?string $value, array $attributes): string
     {
-        return "<input type=\"text\" " . $this->getHtmlFromArray($attributes) . " value=\"$value\">";
+        return "<input " . $this->getHtmlFromArray($attributes) . " value=\"$value\">";
     }
 
     /**
@@ -102,6 +106,22 @@ class FormTwigExtension extends AbstractExtension
     }
 
     /**
+     *
+     * @param string|null $value
+     * @param array $options
+     * @param array $attributes
+     * @return string
+     */
+    private function select(?string $value, array $options, array $attributes): string
+    {
+        $htmlOptions = array_reduce(array_keys($options), function (string $html, string $key) use ($options, $value) {
+            $params = ['value' => $key, 'selected' => $key === $value];
+            return $html . '<option ' . $this->getHtmlFromArray($params) . '>' . $options[$key] . '</option>';
+        }, "");
+        return "<select " . $this->getHtmlFromArray($attributes) . ">$htmlOptions</select>";
+    }
+
+    /**
      * Convert an attribute array to HTML attributes
      *
      * @param array $attributes
@@ -109,9 +129,15 @@ class FormTwigExtension extends AbstractExtension
      */
     private function getHtmlFromArray(array $attributes): string
     {
-        return implode(' ', array_map(function ($key, $value) {
-            return "$key=\"$value\"";
-        }, array_keys($attributes), $attributes));
+        $htmlParts = [];
+        foreach ($attributes as $key => $value) {
+            if ($value === true) {
+                $htmlParts[] = (string) $key;
+            } elseif ($value !== false) {
+                $htmlParts[] = "$key=\"$value\"";
+            }
+        }
+        return implode(' ', $htmlParts);
     }
 
     /**

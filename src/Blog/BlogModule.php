@@ -2,7 +2,8 @@
 
 namespace App\Blog;
 
-use App\Blog\Actions\AdminBlogAction;
+use App\Blog\Actions\CategoryCrudAction;
+use App\Blog\Actions\PostCrudAction;
 use App\Blog\Actions\BlogAction;
 use FlexibleFramework\AbstractModule;
 use FlexibleFramework\Renderer\RendererInterface;
@@ -34,7 +35,8 @@ class BlogModule extends AbstractModule
 
         if ($container->has('admin.prefix')) {
             $prefix = $container->get('admin.prefix');
-            $router->crud("$prefix/posts", AdminBlogAction::class, 'post.admin');
+            $router->crud("$prefix/posts", PostCrudAction::class, 'blog.admin');
+            $router->crud("$prefix/categories", CategoryCrudAction::class, 'blog.category.admin');
         }
     }
 }

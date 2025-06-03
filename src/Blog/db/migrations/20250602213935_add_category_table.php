@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
-final class CreatePostsTable extends AbstractMigration
+final class AddCategoryTable extends AbstractMigration
 {
     /**
      * Change Method.
@@ -20,12 +19,10 @@ final class CreatePostsTable extends AbstractMigration
      */
     public function change(): void
     {
-        $this->table('posts')
+        $this->table('categories')
             ->addColumn('name', 'string')
             ->addColumn('slug', 'string')
-            ->addColumn('content', 'text', ['limit' => MysqlAdapter::TEXT_LONG])
-            ->addTimestamps()
+            ->addIndex('slug', ['unique' => true])
             ->create();
-
     }
 }

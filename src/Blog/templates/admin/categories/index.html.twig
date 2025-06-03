@@ -1,10 +1,11 @@
 {% extends '@admin/layout.html.twig' %}
 
-{% block title "Post" %}
+{% block title "Category" %}
 
 {% block body %}
+    <h1>Categories</h1>
     <p class="text-right">
-        <a href="{{ path('post.admin.create') }}" class="btn btn-success">Create a new article</a>
+        <a href="{{ path(routePrefix ~ '.create') }}" class="btn btn-success">Create a new category</a>
     </p>
     <table class="table table-striped">
         <thead>
@@ -20,8 +21,8 @@
                 <td>{{ item.id }}</td>
                 <td>{{ item.name }}</td>
                 <td>
-                    <a href="{{ path('post.admin.edit', {id: item.id}) }}" class="btn btn-primary">Edit</a>
-                    <form action="{{ path('post.admin.delete', {id: item.id}) }}" method="post" onsubmit="
+                    <a href="{{ path(routePrefix ~ '.edit', {id: item.id}) }}" class="btn btn-primary">Edit</a>
+                    <form action="{{ path(routePrefix ~ '.delete', {id: item.id}) }}" method="post" onsubmit="
                         confirm('Are your shure?');" style="display: inline;">
                         <input type="hidden" name="_method" value="DELETE">
                         <button class="btn btn-danger">Delete</button>
@@ -31,5 +32,5 @@
         {% endfor %}
         </tbody>
     </table>
-    {{ paginate(items, 'post.admin.index') }}
+    {{ paginate(items, routePrefix ~ '.index') }}
 {% endblock %}

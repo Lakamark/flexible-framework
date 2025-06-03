@@ -16,6 +16,8 @@ class Post
 
     public $updated_at;
 
+    public $category_id;
+
     public function __construct()
     {
         if ($this->created_at) {
