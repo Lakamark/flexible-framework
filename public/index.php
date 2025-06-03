@@ -4,32 +4,33 @@ chdir(dirname(__DIR__));
 
 require "vendor/autoload.php";
 
+use App\Admin\AdminModule;
+use App\Blog\BlogModule;
 use FlexibleFramework\Kernel;
+use FlexibleFramework\Middleware\DispatcherMiddleware;
+use FlexibleFramework\Middleware\MethodMiddleware;
+use FlexibleFramework\Middleware\NotFoundMiddleware;
+use FlexibleFramework\Middleware\RouterMiddleware;
+use FlexibleFramework\Middleware\TrailingSlashMiddleware;
 use GuzzleHttp\Psr7\ServerRequest;
 
 use function Http\Response\send;
 
-$modules = [
-    \App\Admin\AdminModule::class,
-    \App\Blog\BlogModule::class,
-];
+$kernel = (new Kernel([
+    dirname(__DIR__) . '/config/app.php',
+    dirname(__DIR__) . '/config/template.php',
+    dirname(__DIR__) . '/config/database.php',
+]))
+    ->addModule(AdminModule::class)
+    ->addModule(BlogModule::class);
 
-$builder = new \DI\ContainerBuilder();
-$builder->addDefinitions(dirname(__DIR__) . '/config/app.php');
-$builder->addDefinitions(dirname(__DIR__) . '/config/template.php');
-$builder->addDefinitions(dirname(__DIR__) . '/config/database.php');
-
-foreach ($modules as $module) {
-    if ($module::DEFINITIONS) {
-        $builder->addDefinitions($module::DEFINITIONS);
-    }
-}
-
-$builder->addDefinitions(dirname(__DIR__) . '/config.php');
-
-$container = $builder->build();
-
-$kernel = new Kernel($container, $modules);
+$kernel
+    ->pipe(TrailingSlashMiddleware::class)
+    ->pipe(MethodMiddleware::class)
+    ->pipe(RouterMiddleware::class)
+    ->pipe(DispatcherMiddleware::class)
+    ->pipe(NotFoundMiddleware::class)
+;
 
 if (php_sapi_name() !== "cli") {
     $response = $kernel->run(ServerRequest::fromGlobals());

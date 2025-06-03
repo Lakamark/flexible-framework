@@ -8,19 +8,16 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class CallableMiddleware implements MiddlewareInterface
+class TrailingSlashMiddleware implements MiddlewareInterface
 {
-    public function __construct(
-        private $callable
-    ) {}
-
-    public function getCallable()
-    {
-        return $this->callable;
-    }
-
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        return new Response();
+        $uri = $request->getUri()->getPath();
+        if (!empty($uri) && $uri !== '/' && $uri[-1] === "/") {
+            return (new Response())
+                ->withStatus(301)
+                ->withHeader('Location', substr($uri, 0, -1));
+        }
+        return $handler->handle($request);
     }
 }

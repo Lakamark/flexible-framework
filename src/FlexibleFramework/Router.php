@@ -2,11 +2,11 @@
 
 namespace FlexibleFramework;
 
-use FlexibleFramework\Middleware\CallableMiddleware;
+use App\FlexibleFramework\Middleware\KernelMiddleware\CallableMiddleware;
 use FlexibleFramework\Router\Route;
 use Mezzio\Router\FastRouteRouter;
-use Psr\Http\Message\ServerRequestInterface;
 use Mezzio\Router\Route as MezzioRoute;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Router
 {
