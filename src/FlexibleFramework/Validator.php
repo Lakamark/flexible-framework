@@ -2,6 +2,8 @@
 
 namespace FlexibleFramework;
 
+use DateTime;
+use FlexibleFramework\Database\Table;
 use FlexibleFramework\Validator\ValidatorError;
 
 class Validator
@@ -116,12 +118,31 @@ class Validator
     public function dateTime(string $key, string $format = "Y-m-d H:i:s"): self
     {
         $value = $this->getValue($key);
-        $date = \DateTime::createFromFormat($format, $value);
-        $errors = \DateTime::getLastErrors();
+        DateTime::createFromFormat($format, $value);
+        $errors = DateTime::getLastErrors();
         if ($errors !== false) {
             if ($errors['error_count'] > 0 || $errors['warning_count'] > 0) {
                 $this->addError($key, 'datetime', [$format]);
             }
+        }
+        return $this;
+    }
+
+    /**
+     * Check if the record exists in the database
+     *
+     * @param string $key
+     * @param string $table
+     * @param \PDO $pdo
+     * @return $this
+     */
+    public function exists(string $key, string $table, \PDO $pdo): self
+    {
+        $value = $this->getValue($key);
+        $statement = $pdo->prepare("SELECT id FROM $table WHERE id = ?");
+        $statement->execute([$value]);
+        if ($statement->fetchColumn() === false) {
+            $this->addError($key, 'exists', [$table]);
         }
         return $this;
     }

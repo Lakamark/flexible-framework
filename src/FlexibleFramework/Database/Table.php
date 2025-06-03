@@ -146,6 +146,19 @@ class Table
     }
 
     /**
+     * Check if a record exists in the database
+     *
+     * @param $id
+     * @return bool
+     */
+    public function exists($id): bool
+    {
+        $statement = $this->pdo->prepare("SELECT id FROM $this->table WHERE id = ?");
+        $statement->execute([$id]);
+        return $statement->fetchColumn() !== false;
+    }
+
+    /**
      * @return string
      */
     public function getTable(): string

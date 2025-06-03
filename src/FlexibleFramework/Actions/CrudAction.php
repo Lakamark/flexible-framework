@@ -2,6 +2,7 @@
 
 namespace FlexibleFramework\Actions;
 
+use FlexibleFramework\Database\Table;
 use FlexibleFramework\Renderer\RendererInterface;
 use FlexibleFramework\Router;
 use FlexibleFramework\Session\FlashService;
@@ -34,7 +35,7 @@ abstract class CrudAction
     public function __construct(
         private readonly RendererInterface $renderer,
         private readonly Router            $router,
-        private $table,
+        private readonly Table             $table,
         private readonly FlashService      $flash,
     ) {}
 

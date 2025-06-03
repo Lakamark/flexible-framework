@@ -12,6 +12,7 @@ class ValidatorError
         'maxLength' => 'The %s field must be at most %d characters.',
         'between' => 'The %s field must be between %d and %d characters.',
         'datetime' => 'The %s field must be a valid datetime (%s).',
+        'exists' => 'The %s field does not exist in the table %s database.',
     ];
 
     public function __construct(

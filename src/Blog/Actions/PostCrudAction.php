@@ -63,10 +63,11 @@ class PostCrudAction extends CrudAction
     protected function getValidator(Request $request): Validator
     {
         return parent::getValidator($request)
-            ->required('content', 'name', 'slug')
+            ->required('content', 'name', 'slug', 'category_id')
             ->length('content', 10)
             ->length('name', 2, 255)
             ->length('slug', 2, 50)
+            ->exists('category_id', $this->categoryTable->getTable(), $this->categoryTable->getPdo())
             ->slug('slug');
     }
 }
