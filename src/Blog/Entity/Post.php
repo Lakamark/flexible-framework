@@ -2,6 +2,10 @@
 
 namespace App\Blog\Entity;
 
+use AllowDynamicProperties;
+
+#[AllowDynamicProperties]
+
 class Post
 {
     public $id;

@@ -4,6 +4,7 @@ namespace Tests\Blog\Table;
 
 use App\Blog\Entity\Post;
 use App\Blog\Table\PostTable;
+use FlexibleFramework\Database\NoRecordException;
 use Tests\DatabaseTestCase;
 
 class PostTableTest extends DatabaseTestCase
@@ -27,8 +28,8 @@ class PostTableTest extends DatabaseTestCase
 
     public function testNotFoundRecord(): void
     {
-        $post = $this->postTable->find(1);
-        $this->assertNull($post);
+        $this->expectException(NoRecordException::class);
+        $this->postTable->find(1);
     }
 
     public function testUpdate(): void

@@ -13,6 +13,7 @@ class ValidatorError
         'between' => 'The %s field must be between %d and %d characters.',
         'datetime' => 'The %s field must be a valid datetime (%s).',
         'exists' => 'The %s field does not exist in the table %s database.',
+        'unique' => 'The %s field must be unique.',
     ];
 
     public function __construct(

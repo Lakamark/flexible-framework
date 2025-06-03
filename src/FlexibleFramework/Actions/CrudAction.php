@@ -2,6 +2,7 @@
 
 namespace FlexibleFramework\Actions;
 
+use FlexibleFramework\Database\NoRecordException;
 use FlexibleFramework\Database\Table;
 use FlexibleFramework\Renderer\RendererInterface;
 use FlexibleFramework\Router;
@@ -23,6 +24,8 @@ abstract class CrudAction
      */
     protected string $routePrefix;
 
+    protected Table $table;
+
     /**
      * @var string[]
      */
@@ -35,9 +38,11 @@ abstract class CrudAction
     public function __construct(
         private readonly RendererInterface $renderer,
         private readonly Router            $router,
-        private readonly Table             $table,
+        $table,
         private readonly FlashService      $flash,
-    ) {}
+    ) {
+        $this->table = $table;
+    }
 
     public function __invoke(Request $request): string|ResponseInterface
     {
@@ -105,6 +110,7 @@ abstract class CrudAction
      *
      * @param Request $request
      * @return ResponseInterface|string
+     * @throws NoRecordException
      */
     public function edit(Request $request): string|ResponseInterface
     {
@@ -113,7 +119,6 @@ abstract class CrudAction
 
         if ($request->getMethod() === 'POST') {
             $params = $this->getParams($request);
-            $params['updated_at'] = date('Y-m-d H:i:s');
 
             $validator = $this->getValidator($request);
             if ($validator->isValid()) {
@@ -122,9 +127,6 @@ abstract class CrudAction
                 return $this->redirect($this->routePrefix . '.index');
             }
 
-            $item->content = $params['content'];
-            $item->name = $params['name'];
-            $item->slug = $params['slug'];
             $errors = $validator->getErrors();
         }
 

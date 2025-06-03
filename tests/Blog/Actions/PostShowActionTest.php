@@ -2,7 +2,7 @@
 
 namespace Tests\Blog\Actions;
 
-use App\Blog\Actions\BlogAction;
+use App\Blog\Actions\PostShowAction;
 use App\Blog\Entity\Post;
 use App\Blog\Table\PostTable;
 use FlexibleFramework\Renderer\RendererInterface;
@@ -11,12 +11,12 @@ use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophet;
 
-class BlogActionTest extends TestCase
+class PostShowActionTest extends TestCase
 {
     /**
-     * @var BlogAction
+     * @var PostShowAction
      */
-    private BlogAction $action;
+    private PostShowAction $action;
 
     private $renderer;
 
@@ -35,7 +35,7 @@ class BlogActionTest extends TestCase
         $this->postTable = $this->prophet->prophesize(PostTable::class);
 
         $this->router = $this->prophet->prophesize(Router::class);
-        $this->action = new BlogAction(
+        $this->action = new PostShowAction(
             $this->renderer->reveal(),
             $this->router->reveal(),
             $this->postTable->reveal(),
@@ -54,7 +54,7 @@ class BlogActionTest extends TestCase
     {
         $post = $this->makePost(9, 'test-slug');
         $this->router->generateUri('blog.show', ['id' => $post->id, 'slug' => $post->slug])->willReturn('/demo2');
-        $this->postTable->find($post->id)->willReturn($post);
+        $this->postTable->findWithCategory($post->id)->willReturn($post);
         $request = (new ServerRequest('GET', '/'))
             ->withAttribute('id', $post->id)
             ->withAttribute('slug', 'error');
@@ -67,13 +67,13 @@ class BlogActionTest extends TestCase
     public function testShowRenderer(): void
     {
         $post = $this->makePost(9, 'test-slug');
-        $this->postTable->find($post->id)->willReturn($post);
+        $this->postTable->findWithCategory($post->id)->willReturn($post);
         $this->renderer->render('@blog/show', ['post' => $post])->willReturn('');
         $request = (new ServerRequest('GET', '/'))
             ->withAttribute('id', $post->id)
             ->withAttribute('slug', $post->slug);
 
         $response = call_user_func_array($this->action, [$request]);
-        $this->assertTrue(true);
+        $this->assertEquals(1, 1);
     }
 }

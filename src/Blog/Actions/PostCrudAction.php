@@ -45,7 +45,7 @@ class PostCrudAction extends CrudAction
     protected function getNewEntity(): Post
     {
         $post = new Post();
-        $post->created_at = new DateTime('Y-m-d H:i:s');
+        $post->created_at = new DateTime('now');
         return $post;
     }
 
