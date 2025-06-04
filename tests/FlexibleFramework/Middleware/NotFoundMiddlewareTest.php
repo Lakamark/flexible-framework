@@ -6,7 +6,6 @@ use FlexibleFramework\Middleware\NotFoundMiddleware;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class NotFoundMiddlewareTest extends TestCase

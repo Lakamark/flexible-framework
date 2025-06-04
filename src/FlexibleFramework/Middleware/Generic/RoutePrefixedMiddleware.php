@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FlexibleFramework\Middleware\KernelMiddleware;
+namespace FlexibleFramework\Middleware\Generic;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;

@@ -2,7 +2,7 @@
 
 namespace FlexibleFramework;
 
-use App\FlexibleFramework\Middleware\KernelMiddleware\CallableMiddleware;
+use App\FlexibleFramework\Middleware\Generic\CallableMiddleware;
 use FlexibleFramework\Router\Route;
 use Mezzio\Router\FastRouteRouter;
 use Mezzio\Router\Route as MezzioRoute;

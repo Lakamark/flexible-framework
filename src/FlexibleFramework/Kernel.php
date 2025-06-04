@@ -2,12 +2,14 @@
 
 namespace FlexibleFramework;
 
-use App\FlexibleFramework\Middleware\KernelMiddleware\CombinedMiddleware;
-use App\FlexibleFramework\Middleware\KernelMiddleware\RoutePrefixedMiddleware;
+use App\FlexibleFramework\Middleware\Generic\CombinedMiddleware;
+use FlexibleFramework\Middleware\Generic\RoutePrefixedMiddleware;
 use DI\ContainerBuilder;
 use Exception;
 use FlexibleFramework\Exception\KernelException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -25,7 +27,7 @@ class Kernel implements RequestHandlerInterface
      */
     private array $definitions;
 
-    private $container;
+    private ContainerInterface|null $container = null;
 
     /**
      * @var array
@@ -84,6 +86,7 @@ class Kernel implements RequestHandlerInterface
 
     /**
      * @throws KernelException
+     * @throws Exception
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -95,6 +98,12 @@ class Kernel implements RequestHandlerInterface
         return $middleware->process($request, $this);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws KernelException
+     * @throws Exception
+     */
     public function run(ServerRequestInterface $request): ResponseInterface
     {
         foreach ($this->modules as $module) {
@@ -123,16 +132,15 @@ class Kernel implements RequestHandlerInterface
 
             /*
              * Add the definitions in the kernel
-             * app.php
-             * database.php
-             * template.php
-             * etc.
+             * You can add your config file in the kernel constructor
+             *
+             * $myApp = new Kernel(['config/app.php', 'config/template.php', 'config/database.php'])
              */
             foreach ($this->definitions as $definition) {
                 $builder->addDefinitions($definition);
             }
 
-            // Load all the module with their definitions in the kernel
+            // Each module can add some configuration via the const definitions in the kernel
             foreach ($this->modules as $module) {
                 if ($module::DEFINITIONS) {
                     $builder->addDefinitions($module::DEFINITIONS);

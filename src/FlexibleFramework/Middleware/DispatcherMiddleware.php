@@ -2,7 +2,7 @@
 
 namespace FlexibleFramework\Middleware;
 
-use App\FlexibleFramework\Middleware\KernelMiddleware\CombinedMiddleware;
+use App\FlexibleFramework\Middleware\Generic\CombinedMiddleware;
 use FlexibleFramework\Router\Route;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;

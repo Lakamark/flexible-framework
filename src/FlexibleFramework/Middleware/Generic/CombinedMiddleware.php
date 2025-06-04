@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FlexibleFramework\Middleware\KernelMiddleware;
+namespace App\FlexibleFramework\Middleware\Generic;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,7 +17,7 @@ class CombinedMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $handler = new CombinedMiddlewareDelegate(
+        $handler = new DelegateMiddleware(
             $this->container,
             $this->middlewares,
             $handler
