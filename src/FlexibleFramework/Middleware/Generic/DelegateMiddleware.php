@@ -3,7 +3,9 @@
 namespace App\FlexibleFramework\Middleware\Generic;
 
 use GuzzleHttp\Psr7\Response;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -26,6 +28,10 @@ class DelegateMiddleware implements RequestHandlerInterface
         $this->handler = $handler;
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $middleware = $this->getMiddleware();
@@ -40,12 +46,15 @@ class DelegateMiddleware implements RequestHandlerInterface
         } elseif ($middleware instanceof MiddlewareInterface) {
             return $middleware->process($request, $this);
         }
+        return $middleware->process($request, $this);
     }
 
     /**
-     * @return object
+     * @return object|null
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    private function getMiddleware()
+    private function getMiddleware(): ?object
     {
         if (array_key_exists($this->index, $this->middlewares)) {
             if (is_string($this->middlewares[$this->index])) {
