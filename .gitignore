@@ -5,3 +5,6 @@
 .php-cs-fixer.php
 composer.lock
 config.php
+.env
+/.env.*.local
+/.env.local

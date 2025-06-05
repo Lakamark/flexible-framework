@@ -2,6 +2,7 @@
 
 namespace FlexibleFramework;
 
+use App\FlexibleFramework\Loader\EnvLoader;
 use App\FlexibleFramework\Middleware\Generic\CombinedMiddleware;
 use FlexibleFramework\Middleware\Generic\RoutePrefixedMiddleware;
 use DI\ContainerBuilder;
@@ -38,6 +39,8 @@ class Kernel implements RequestHandlerInterface
      * @var int
      */
     private int $index = 0;
+
+    private EnvLoader|null $dotEnv = null;
 
     /**
      * Kernel constructor.
@@ -128,7 +131,17 @@ class Kernel implements RequestHandlerInterface
     public function getContainer(): ContainerInterface
     {
         if ($this->container === null) {
+
+            // Initialize defaults env variable before to build the container
+            $this->dotEnv = new EnvLoader(dirname(__DIR__, 2));
+
             $builder = new ContainerBuilder();
+
+            /**
+             * We initialize an internContainer top preload some classes.
+             * We need to run the kernel To set up some default variable.
+             */
+            $builder->addDefinitions(__DIR__ . '/InternContainer.php');
 
             /*
              * Add the definitions in the kernel

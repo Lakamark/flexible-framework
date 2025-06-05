@@ -7,10 +7,10 @@
 use Psr\Container\ContainerInterface;
 
 return [
-    'database.host' => 'localhost',
-    'database.username' => 'root',
-    'database.password' => 'root',
-    'database.name' => 'flexible',
+    'database.host' => getenv('DATABASE_HOST') ?: 'localhost',
+    'database.username' => getenv('DATABASE_USERNAME'),
+    'database.password' => getenv('DATABASE_PASSWORD'),
+    'database.name' => getenv('DATABASE_NAME'),
     \PDO::class => function (ContainerInterface $c) {
         return new PDO(
             'mysql:host=' . $c->get('database.host') . ';dbname=' . $c->get('database.name'),

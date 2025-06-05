@@ -1,4 +1,4 @@
-## Installation 
+# Installation 
 
 To run the demo. You need to lunch some command line and to edit the configuration.
 
@@ -9,23 +9,33 @@ Run composer install to generate the vendor directory.
 composer install
 ````
 
-In the root project, duplicate the file config.dist.php to config.php.
+## Use an env file instead of config.php!
+In the old version, you should create a `config.php` file in the root proj to set up your environment.
+To respect the standard, I decided to change the configuration system in the framework. 
+To edit the configuration, you should to rename file `.example.env` to `.env` or to `env.local` in the root project.
+Then change the database keys to adapt the framework to your dev environment. 
 
-**Ensure the config.php is added in the .ignore file. 
-Don't publish it on GitHub to avoid some security issues.**
+It is safe and flexible with this new way. 
 
-````php
-<?php
+````bash
+## This file is all your environment.
+# We commanded to follow this pattern.
+#  * .env                contains default values for the environment variables needed by the app
+#  * .env.local          uncommitted file with local overrides.
+#
+# It is commander to publish .example.env.
+# On your local environment to use this template to create your own .env file.
 
-/**
- * The main configuration for your database.
- */
-return [
-    'database.host' => 'YOUR_HOST',
-    'database.username' => 'YOUR_USERNAME',
-    'database.password' => 'YOUR_PASSWORD',
-    'database.name' => 'YOUR_DATABSE_NAME',
-];
+# Global FlexibleFramework env variables
+APP_ENV=prod
+
+## Database connection
+DATABASE_HOST='!changeMe!'
+DATABASE_USERNAME='!changeMe!'
+DATABASE_PASSWORD='!changeMe!'
+DATABASE_NAME='!changeMe'
+
+## ...
 ````
 
 To create your database on mysql server
